@@ -303,13 +303,24 @@ def getPosCursor():
     return [pt.x, pt.y]
 
 
-def click(x, y=0, RIGHT=False):
+def click(x: list or tuple, y: int = None, RIGHT: bool = False):
+    """
+    Moves the mouse cursor to the specified (x, y) position or the position specified in a list or tuple.
+    If RIGHT is True, performs a right-click instead of a left-click.
+    
+    Parameters:
+    x (int or list/tuple): The x-coordinate or the position as a list or tuple.
+    y (int): The y-coordinate. Defaults to 0 if not provided.
+    RIGHT (bool): Whether to perform a right-click. Defaults to False.
+    """
+
     if isinstance(x, list) or isinstance(x, tuple):
-        ctypes.windll.user32.SetCursorPos(int(x[0]),int( x[1]))
+        x, y = int(x[0]), int(x[1])
     else:
-        x=int(x)
-        y=int(y)
-        ctypes.windll.user32.SetCursorPos(x, y)
+        x, y = int(x), int(y)
+
+    ctypes.windll.user32.SetCursorPos(x, y)
+
     if RIGHT:
         ctypes.windll.user32.mouse_event(0x0008, 0, 0, 0, 0)  # right down
         ctypes.windll.user32.mouse_event(0x0010, 0, 0, 0, 0)  # right up
@@ -318,7 +329,16 @@ def click(x, y=0, RIGHT=False):
         ctypes.windll.user32.mouse_event(4, 0, 0, 0, 0)  # left up
 
 
-def moveMouseTo(FirstPos, SecondPos, pps = 300, step= 1):
+def moveMouseTo(FirstPos: list or tuple, SecondPos: list or tuple, pps: int = 300, step: int = 1):
+    """
+    Move the mouse from the first position to the second position with a certain speed and step.
+
+    :param FirstPos (list or tuple): a list or tuple containing the coordinates (x, y) of the first position.
+    :param SecondPos (list or tuple): a list or tuple containing the coordinates (x, y) of the second position.
+    :param pps (int, optional): the speed of movement in pixels per second. Defaults to 300.
+    :param step (int, optional): the number of pixels to move the mouse for each step. Defaults to 1.
+    """
+
     x1, y1 = FirstPos
     ctypes.windll.user32.SetCursorPos(x1, y1)
     x2, y2 = SecondPos
@@ -406,7 +426,15 @@ def Fonction(POR='PR',Fonc='MAJ_L'):
         sleep(0.0000000000000001)
 
 
-def Write(text='',MAJ=False,ALT=False,CTRL=False,ReplaceNotExist='.'):
+def Write(text: str = '', MAJ: bool = False, ALT: bool = False, CTRL: bool = False, ReplaceNotExist: str = '.') -> None:
+    """
+    This function simulates the typing of a given text by pressing the corresponding keys.
+    :param text: The text to be typed (default: '')
+    :param MAJ: A boolean indicating whether the Shift key should be pressed during typing of text (default: False)
+    :param ALT: A boolean indicating whether the Alt key should be pressed during typing of text (default: False)
+    :param CTRL: A boolean indicating whether the Ctrl key should be pressed during typing of text (default: False)
+    :param ReplaceNotExist: The character to replace non-existent characters in DictKey (default: '.')
+    """
     if type(text) != str:
         text = str(text)
     for i in text:
@@ -440,15 +468,16 @@ def Copy(All=False,Cut=False):
     if All:
         Fonction('P','CTRL_L');PressKey(DictKey['A'])
         Fonction('R','CTRL_L');ReleaseKey(DictKey['A'])
-    Fonction('P','CTRL_L');PressKey(DictKey['C'])
-    Fonction('R','CTRL_L');ReleaseKey(DictKey['C'])
     if Cut:
-        PressKey(DictKey['Back_Space'])
-        ReleaseKey(DictKey['Back_Space'])
+        Fonction('P','CTRL_L');PressKey(DictKey['X'])
+        Fonction('R','CTRL_L');ReleaseKey(DictKey['X'])
+    else:
+        Fonction('P','CTRL_L');PressKey(DictKey['C'])
+        Fonction('R','CTRL_L');ReleaseKey(DictKey['C'])
 
 
-def Paste(All=False):
-    if All:
+def Paste(ReplaceAll=False):
+    if ReplaceAll:
         Fonction('P','CTRL_L');PressKey(DictKey['A'])
         Fonction('R','CTRL_L');ReleaseKey(DictKey['A'])
     Fonction('P','CTRL_L');PressKey(DictKey['V'])
