@@ -329,7 +329,7 @@ def click(x: list or tuple, y: int = None, RIGHT: bool = False):
         ctypes.windll.user32.mouse_event(4, 0, 0, 0, 0)  # left up
 
 
-def moveMouseTo(FirstPos: list or tuple, SecondPos: list or tuple, pps: int = 300, step: int = 1):
+def moveMouseTo(FirstPos: list or tuple, SecondPos: list or tuple, pps: int = 300, step: int = 1, max_time: float = 10, info: bool=False):
     """
     Move the mouse from the first position to the second position with a certain speed and step.
 
@@ -337,18 +337,23 @@ def moveMouseTo(FirstPos: list or tuple, SecondPos: list or tuple, pps: int = 30
     :param SecondPos (list or tuple): a list or tuple containing the coordinates (x, y) of the second position.
     :param pps (int, optional): the speed of movement in pixels per second. Defaults to 300.
     :param step (int, optional): the number of pixels to move the mouse for each step. Defaults to 1.
+    :param max_time (float, optional): the maximum time allowed for the movement to complete in seconds. Defaults to 10.
     """
 
     x1, y1 = FirstPos
     ctypes.windll.user32.SetCursorPos(x1, y1)
     x2, y2 = SecondPos
     distance = round(sqrt((x2 - x1)**2 + (y2 - y1)**2))
-    steps = max(distance // step, 1)
-    dx = (x2 - x1) / steps
-    dy = (y2 - y1) / steps
     time_per_step = 1 / pps
     total_time = distance * time_per_step
-    sleep_per_step = total_time / steps
+    if total_time > max_time:
+        time_per_step = max_time / distance
+        print(time_per_step)
+        if info: print(f"Total time ({total_time:.2f}s) exceeds max_time ({max_time}s). Adjusted pps to {int(1 / time_per_step)} pixels/s.")
+    steps = max(distance // 1, 1)
+    dx = (x2 - x1) / steps
+    dy = (y2 - y1) / steps
+    sleep_per_step = time_per_step
     for i in range(steps):
         x = int(x1 + i*dx)
         y = int(y1 + i*dy)
