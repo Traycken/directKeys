@@ -158,7 +158,6 @@ def SpeChar(Char,ReplaceNotExist="."):
     try:
         for i in Alt_Code[Char]:
             Hex = Numerical[i]
-            print(Numerical[i])
             PressKey(Hex);ReleaseKey(Hex)
             sleep(0.0000000000000001)
         print("")
