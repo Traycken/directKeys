@@ -1,5 +1,4 @@
 import ctypes
-from curses.ascii import isupper
 from time import sleep
 from math import sqrt
 from . import Keys
