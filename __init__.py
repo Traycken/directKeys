@@ -6,6 +6,7 @@ from . import Keys
 
 DictKey=Keys.DictKey
 Alt_Code=Keys.Alt_Code
+Numerical=Keys.Numerical
 
 SendInput = ctypes.windll.user32.SendInput
 
@@ -156,9 +157,11 @@ def SpeChar(Char,ReplaceNotExist="."):
     Fonction('P','Alt_L')
     try:
         for i in Alt_Code[Char]:
-            Hex = int((Alt_Code[i]), 16)
+            Hex = Numerical[i]
+            print(Numerical[i])
             PressKey(Hex);ReleaseKey(Hex)
             sleep(0.0000000000000001)
+        print("")
     except Exception as e:
         print(e)
         print(f'[{Char}] not exist and is replace by [{ReplaceNotExist}]')
