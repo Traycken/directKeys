@@ -225,7 +225,6 @@ def Write(text: str = '', MAJ: bool = False, ALT: bool = False, CTRL: bool = Fal
                 Hex = DictKey[i.upper()]
             except:
                 print(f'[{i}] not exist and is replace by [{ReplaceNotExist}]')
-                Hex = DictKey[Write(text=ReplaceNotExist,ReplaceNotExist='.')]
             sleep(0.0000000000000001)
             if i.isupper():
                 Fonction('P','MAJ_L')
