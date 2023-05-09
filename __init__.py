@@ -166,28 +166,41 @@ def SpeChar(Char,ReplaceNotExist="."):
     Fonction('R','Alt_L')
 
 
-def Fonction(POR='PR',Fonc='MAJ_L'):
+def Fonction(POR='PR',Fonc='MAJ_L',HoldTime=0.00000000001):
     ''' 
     POR:
-        'PR' = Press & Release,
-        'P' = Press,
+        'PR' = Press & Release
+        'P' = Press
         'R' = Release
     Fonc:
-        'MAJ_L','MAJ_R',
-        'Alt_L','CTRL_L',
-        'ENTER','TAB',
-        'Back_Space','Caps_Lock',
-        'Num_Lock','Scroll_Lock' 
+        'MAJ_L','MAJ_R','Alt_L','CTRL_L','ENTER','TAB',
+        'Back_Space','Caps_Lock''Num_Lock','Scroll_Lock'
+        OR ANY Letter
     '''
+    if type(Fonc) == str:
+        Fonc = [Fonc]
 
-    for i in [Fonc]:
-        if POR == 'PR':
-            PressKey(DictKey[i]);ReleaseKey(DictKey[i])
-        elif POR == 'P':
-            PressKey(DictKey[i])
-        elif POR == 'R':
+    for i in Fonc:
+        if len(i) <= 1: 
+            i = i.upper()
+        try:
+            if DictKey[i] is not None:
+                if POR == 'PR':
+                    PressKey(DictKey[i])
+                elif POR == 'P':
+                    PressKey(DictKey[i])
+                elif POR == 'R':
+                    ReleaseKey(DictKey[i])
+        except:
+            Write(text=i)
+
+        sleep(HoldTime)
+
+    if POR == 'PR':
+        for i in Fonc:
+            if len(i) <= 1: 
+                i = i.upper()
             ReleaseKey(DictKey[i])
-        sleep(0.0000000000000001)
 
 
 def Write(text: str = '', MAJ: bool = False, ALT: bool = False, CTRL: bool = False, ReplaceNotExist: str = '.') -> None:
@@ -209,8 +222,8 @@ def Write(text: str = '', MAJ: bool = False, ALT: bool = False, CTRL: bool = Fal
             try:
                 Hex = DictKey[i.upper()]
             except:
-                Hex = DictKey[ReplaceNotExist]
                 print(f'[{i}] not exist and is replace by [{ReplaceNotExist}]')
+                Hex = DictKey[Write(text=ReplaceNotExist,ReplaceNotExist='.')]
             sleep(0.0000000000000001)
             if i.isupper():
                 Fonction('P','MAJ_L')
