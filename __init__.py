@@ -183,7 +183,6 @@ def Fonction(POR: str = 'PR', Fonc = [], HoldTime: float = 0.00000000001):
         fonc = [Fonc]
 
     for i in Fonc:
-        print(i)
         if len(i) <= 1: 
             i = i.upper()
         try:
