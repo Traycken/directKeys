@@ -153,7 +153,7 @@ def SpeChar(Char,ReplaceNotExist="."):
     if type(Char) != str:
         Char = str(Char)
 
-    Fonction('P','Alt_L')
+    Fonction('P',['Alt_L'])
     try:
         for i in Alt_Code[Char]:
             Hex = Numerical[i]
@@ -163,10 +163,10 @@ def SpeChar(Char,ReplaceNotExist="."):
     except Exception as e:
         print(e)
         print(f'[{Char}] not exist and is replace by [{ReplaceNotExist}]')
-    Fonction('R','Alt_L')
+    Fonction('R',['Alt_L'])
 
 
-def Fonction(POR='PR',Fonc='MAJ_L',HoldTime=0.00000000001):
+def Fonction(POR: str = 'PR', Fonc: list = [], HoldTime: float = 0.00000000001):
     ''' 
     POR:
         'PR' = Press & Release
@@ -175,10 +175,9 @@ def Fonction(POR='PR',Fonc='MAJ_L',HoldTime=0.00000000001):
     Fonc:
         'MAJ_L','MAJ_R','Alt_L','CTRL_L','ENTER','TAB',
         'Back_Space','Caps_Lock''Num_Lock','Scroll_Lock'
-        OR ANY Letter
+        ANY Letter
+        Multiple fonc = ['CTRL_L','C']
     '''
-    if type(Fonc) == str:
-        Fonc = [Fonc]
 
     for i in Fonc:
         if len(i) <= 1: 
@@ -216,26 +215,25 @@ def Write(text: str = '', MAJ: bool = False, ALT: bool = False, CTRL: bool = Fal
         text = str(text)
     for i in text:
         if (i.upper()) in DictKey:
-            Fonction('P','MAJ_L') if MAJ else ...
-            Fonction('P','Alt_L') if ALT else ...
-            Fonction('P','CTRL_L') if CTRL else ...
+            Fonction('P',['MAJ_L']) if MAJ else ...
+            Fonction('P',['Alt_L']) if ALT else ...
+            Fonction('P',['CTRL_L']) if CTRL else ...
             try:
                 Hex = DictKey[i.upper()]
             except:
                 print(f'[{i}] not exist and is replace by [{ReplaceNotExist}]')
-                Hex = DictKey[Write(text=ReplaceNotExist,ReplaceNotExist='.')]
             sleep(0.0000000000000001)
             if i.isupper():
-                Fonction('P','MAJ_L')
+                Fonction('P',['MAJ_L'])
                 PressKey(Hex)
                 ReleaseKey(Hex)
-                Fonction('R','MAJ_L')
+                Fonction('R',['MAJ_L'])
             else:
                 PressKey(Hex)
                 ReleaseKey(Hex)
-            Fonction('R','MAJ_L') if MAJ else ...
-            Fonction('R','Alt_L') if ALT else ...
-            Fonction('R','CTRL_L') if CTRL else ...
+            Fonction('R',['MAJ_L']) if MAJ else ...
+            Fonction('R',['Alt_L']) if ALT else ...
+            Fonction('R',['CTRL_L']) if CTRL else ...
         else:
             SpeChar(i,ReplaceNotExist)
 
@@ -243,24 +241,24 @@ def Write(text: str = '', MAJ: bool = False, ALT: bool = False, CTRL: bool = Fal
 
 def Copy(All=False,Cut=False):
     if All:
-        Fonction('P','CTRL_L');PressKey(DictKey['A'])
-        Fonction('R','CTRL_L');ReleaseKey(DictKey['A'])
+        Fonction('P',['CTRL_L']);PressKey(DictKey['A'])
+        Fonction('R',['CTRL_L']);ReleaseKey(DictKey['A'])
     if Cut:
-        Fonction('P','CTRL_L');PressKey(DictKey['X'])
-        Fonction('R','CTRL_L');ReleaseKey(DictKey['X'])
+        Fonction('P',['CTRL_L']);PressKey(DictKey['X'])
+        Fonction('R',['CTRL_L']);ReleaseKey(DictKey['X'])
     else:
-        Fonction('P','CTRL_L');PressKey(DictKey['C'])
-        Fonction('R','CTRL_L');ReleaseKey(DictKey['C'])
+        Fonction('P',['CTRL_L']);PressKey(DictKey['C'])
+        Fonction('R',['CTRL_L']);ReleaseKey(DictKey['C'])
 
 
 def Paste(ReplaceAll=False):
     if ReplaceAll:
-        Fonction('P','CTRL_L');PressKey(DictKey['A'])
-        Fonction('R','CTRL_L');ReleaseKey(DictKey['A'])
-    Fonction('P','CTRL_L');PressKey(DictKey['V'])
-    Fonction('R','CTRL_L');ReleaseKey(DictKey['V'])
+        Fonction('P',['CTRL_L']);PressKey(DictKey['A'])
+        Fonction('R',['CTRL_L']);ReleaseKey(DictKey['A'])
+    Fonction('P',['CTRL_L']);PressKey(DictKey['V'])
+    Fonction('R',['CTRL_L']);ReleaseKey(DictKey['V'])
 
 
 def BackSpace(iteration=1):
     for i in range(iteration):
-        Fonction('PR','Back_Space')
+        Fonction('PR',['Back_Space'])
