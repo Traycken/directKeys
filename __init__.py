@@ -166,7 +166,7 @@ def SpeChar(Char,ReplaceNotExist="."):
     Fonction('R','Alt_L')
 
 
-def Fonction(POR: str = 'PR', Fonc = [], HoldTime: float = 0.00000000001):
+def Fonction(POR: str = 'PR', Fonc = [], HoldTime: float = 0.01):
     ''' 
     POR:
         'PR' = Press & Release
@@ -177,32 +177,46 @@ def Fonction(POR: str = 'PR', Fonc = [], HoldTime: float = 0.00000000001):
         'Back_Space','Caps_Lock''Num_Lock','Scroll_Lock'
         ANY Letter
         Multiple fonc = ['CTRL_L','C']
+        Multiple Iteration = {'C':2} Press and release 2 x C
     '''
+    
+    if type(Fonc) == dict:
+        for key, iteration in Fonc.items():
+            key = key.upper()
+            
+            if DictKey[key] is not None:
+                for i in range(iteration):
+                    PressKey(DictKey[key])
+                    ReleaseKey(DictKey[key])
+    else:
+        if HoldTime == 0:
+            HoldTime = 0.01
 
-    if type(Fonc) == str:
-        fonc = [Fonc]
+        if type(Fonc) == str:
+            Fonc = [Fonc]
 
-    for i in Fonc:
-        if len(i) <= 1: 
-            i = i.upper()
-        try:
-            if DictKey[i] is not None:
-                if POR == 'PR':
-                    PressKey(DictKey[i])
-                elif POR == 'P':
-                    PressKey(DictKey[i])
-                elif POR == 'R':
-                    ReleaseKey(DictKey[i])
-        except:
-            Write(text=i)
+        for key in Fonc:
+            key = key.upper()
+            try:
+                if DictKey[key] is not None:
+                    if POR == 'PR':
+                        PressKey(DictKey[key])
+                    elif POR == 'P':
+                        PressKey(DictKey[key])
+                    elif POR == 'R':
+                        ReleaseKey(DictKey[key])
+            except:
+                Write(text=key)
 
-    sleep(HoldTime)
+        sleep(HoldTime)
 
-    if POR == 'PR':
-        for i in Fonc:
-            if len(i) <= 1: 
-                i = i.upper()
-            ReleaseKey(DictKey[i])
+        if POR == 'PR':
+            for key in Fonc:
+                key = key.upper()
+                try:
+                    ReleaseKey(DictKey[key])
+                except:
+                    pass
 
 
 def Write(text: str = '', MAJ: bool = False, ALT: bool = False, CTRL: bool = False, ReplaceNotExist: str = '.') -> None:
@@ -263,5 +277,4 @@ def Paste(ReplaceAll=False):
 
 
 def BackSpace(iteration=1):
-    for i in range(iteration):
-        Fonction('PR','Back_Space')
+    Fonction(Fonc={'Back_Space':iteration})
