@@ -219,7 +219,7 @@ def Fonction(POR: str = 'PR', Fonc = [], HoldTime: float = 0.01):
                     pass
 
 
-def Write(text: str = '', MAJ: bool = False, ALT: bool = False, CTRL: bool = False, ReplaceNotExist: str = '.') -> None:
+def Write(text: str = '', MAJ: bool = False, ALT: bool = False, CTRL: bool = False, ReplaceNotExist: str = '.', CPM: int = 1800) -> None:
     """
     This function simulates the typing of a given text by pressing the corresponding keys.
     :param text: The text to be typed (default: '')
@@ -227,9 +227,11 @@ def Write(text: str = '', MAJ: bool = False, ALT: bool = False, CTRL: bool = Fal
     :param ALT: A boolean indicating whether the Alt key should be pressed during typing of text (default: False)
     :param CTRL: A boolean indicating whether the Ctrl key should be pressed during typing of text (default: False)
     :param ReplaceNotExist: The character to replace non-existent characters in DictKey (default: '.')
+    :param CPM: Characters per minute, used to control the typing speed (default: 1800) (default Human: 300)
     """
     if type(text) != str:
         text = str(text)
+    
     for i in text:
         if (i.upper()) in DictKey:
             Fonction('P','MAJ_L') if MAJ else ...
@@ -238,8 +240,9 @@ def Write(text: str = '', MAJ: bool = False, ALT: bool = False, CTRL: bool = Fal
             try:
                 Hex = DictKey[i.upper()]
             except:
-                print(f'[{i}] not exist and is replace by [{ReplaceNotExist}]')
-            sleep(0.0000000000000001)
+                Hex = DictKey[ReplaceNotExist]
+                print(f'[{i}] does not exist and is replaced by [{ReplaceNotExist}]')
+            sleep(60 / CPM)
             if i.isupper():
                 Fonction('P','MAJ_L')
                 PressKey(Hex)
@@ -252,7 +255,7 @@ def Write(text: str = '', MAJ: bool = False, ALT: bool = False, CTRL: bool = Fal
             Fonction('R','Alt_L') if ALT else ...
             Fonction('R','CTRL_L') if CTRL else ...
         else:
-            SpeChar(i,ReplaceNotExist)
+            SpeChar(i, ReplaceNotExist)
 
 
 
